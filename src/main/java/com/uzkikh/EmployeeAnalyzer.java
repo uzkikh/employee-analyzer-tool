@@ -38,7 +38,8 @@ public class EmployeeAnalyzer {
     private static void analyzeReportingLength(Employee employee, OrganizationStructureService organizationStructure) {
         int reportingLength = organizationStructure.getEmployeeReportingLineLength(employee.getId());
         if (reportingLength > MAX_REPORTING_LENGTH) {
-            System.out.println("Employee id=" + employee.getId() + " has reporting length=" + reportingLength);
+            System.out.println(String.format("%s has reporting length=%d, longer than required by %d",
+                    employee, reportingLength, (reportingLength - MAX_REPORTING_LENGTH)));
         }
     }
 
@@ -47,7 +48,7 @@ public class EmployeeAnalyzer {
         List<Employee> directSubordinates = organizationStructure.findEmployeeDirectSubordinates(employee.getId());
         BigDecimal change = salaryService.calculateRequiredSalaryChange(employee, directSubordinates);
         if (change.compareTo(BigDecimal.ZERO) != 0) {
-            System.out.println("Employee id=" + employee.getId() + " salary must be adjusted by " + change);
+            System.out.println(String.format("%s salary must be adjusted by %s", employee, change));
         }
     }
 

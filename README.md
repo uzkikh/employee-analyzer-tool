@@ -47,8 +47,8 @@ The program generates output like this:
 File "/Users/ivan/temp/data.csv" processed successfully. Number of records in the file = 20
 
 Results of the analysis of the company structure and current salaries:
-Employee id=124 salary must be adjusted by 15000.00
-Employee id=226 has reporting length=6
+Employee{id=124, firstName='Martin', lastName='Chekov', salary=45000, managerId=123} salary must be adjusted by 15000.00
+Employee{id=305, firstName='Brett', lastName='Hardleaf', salary=34000, managerId=300} has reporting length=6, longer than required by 2
 
 ...
 ```
