@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface OrganizationStructureService {
 
-    List<Employee> findAllEmployees();
+    List<Employee> getAllEmployees();
 
-    List<Employee> findEmployeeDirectSubordinates(int employeeId);
+    List<Employee> getEmployeeDirectSubordinates(int employeeId);
 
     int getEmployeeReportingLineLength(int employeeId);
 }

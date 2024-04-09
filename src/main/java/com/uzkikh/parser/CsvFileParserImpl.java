@@ -1,5 +1,6 @@
 package com.uzkikh.parser;
 
+import com.uzkikh.exception.CsvParserException;
 import com.uzkikh.model.Employee;
 
 import java.io.BufferedReader;
@@ -8,26 +9,31 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class CsvFileParserImpl implements CsvFileParser {
 
-    // Let's assume that we have a strictly defined csv file format with the column separator ","
+    // Let's assume that we have a strictly defined csv file format with the column separator "," and with a header.
+    // This part can be easily improved if necessary by adding new cli arguments when running the program.
     private static final String CSV_COLUMN_SEPARATOR = ",";
+    private static final boolean HAS_HEADER = true;
 
     @Override
     public List<Employee> parseCsv(String fileName) {
-        Objects.requireNonNull(fileName, "Csv file name must be not null");
-        List<Employee> employees = new ArrayList<>();
+        if (fileName == null) {
+            throw new CsvParserException("Csv file name must be not null");
+        }
 
+        List<Employee> employees = new ArrayList<>();
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            br.readLine(); // assume that the source csv contains header and we need to skip it
+            if (HAS_HEADER) {
+                br.readLine();
+            }
             while ((line = br.readLine()) != null) {
                 employees.add(extractEmployee(line));
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CsvParserException("Failed to parse csv file", e);
         }
         System.out.printf("File \"%s\" processed successfully. Number of records in the file = %d%n%n",
                 fileName,
@@ -37,6 +43,10 @@ public class CsvFileParserImpl implements CsvFileParser {
 
     private Employee extractEmployee(String line) {
         String[] lineValues = line.split(CSV_COLUMN_SEPARATOR);
+        if (lineValues.length < 4) {
+            throw new CsvParserException("There is not enough data to extract the employee in the line: \"%s\". Parsing stopped."
+                    .formatted(line));
+        }
 
         int id = Integer.parseInt(lineValues[0]);
         String firstName = lineValues[1];

@@ -1,5 +1,6 @@
 package com.uzkikh.parser;
 
+import com.uzkikh.exception.CsvParserException;
 import com.uzkikh.model.Employee;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,13 +21,13 @@ class CsvFileParserImplTest {
     }
 
     @Test
-    void testShouldThrowNPEIfFilenameIsNull() {
-        assertThrows(NullPointerException.class, () -> csvFileParser.parseCsv(null));
+    void testShouldThrowExceptionIfFilenameIsNull() {
+        assertThrows(CsvParserException.class, () -> csvFileParser.parseCsv(null));
     }
 
     @Test
     void testShouldThrowExceptionIfFileNotFound() {
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> csvFileParser.parseCsv("abcde"));
+        RuntimeException ex = assertThrows(CsvParserException.class, () -> csvFileParser.parseCsv("abcde"));
 
         assertEquals(FileNotFoundException.class, ex.getCause().getClass());
     }
@@ -41,6 +42,12 @@ class CsvFileParserImplTest {
     void testShouldThrowExceptionIfColumnManagerIdFormatIsInvalid() {
         assertThrows(NumberFormatException.class,
                 () -> csvFileParser.parseCsv("src/test/resources/invalid_manager_id_column.csv"));
+    }
+
+    @Test
+    void testShouldThrowExceptionIfCsvFileDoesNotContainRequiredFieldsInLine() {
+        assertThrows(CsvParserException.class,
+                () -> csvFileParser.parseCsv("src/test/resources/invalid_line.csv"));
     }
 
     @Test

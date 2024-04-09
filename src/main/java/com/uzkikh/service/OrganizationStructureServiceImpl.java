@@ -20,25 +20,23 @@ public class OrganizationStructureServiceImpl implements OrganizationStructureSe
     }
 
     @Override
-    public List<Employee> findEmployeeDirectSubordinates(int employeeId) {
+    public List<Employee> getEmployeeDirectSubordinates(int employeeId) {
         return Optional.ofNullable(idToSubordinates.get(employeeId))
                 .orElse(Collections.emptyList());
     }
 
     @Override
-    public List<Employee> findAllEmployees() {
+    public List<Employee> getAllEmployees() {
         return new ArrayList<>(idToEmployee.values());
     }
 
     @Override
     public int getEmployeeReportingLineLength(int employeeId) {
-        int length = 0;
         Employee employee = idToEmployee.get(employeeId);
-        while (employee != null && employee.getManagerId() != -1) {
-            employeeId = employee.getManagerId();
-            employee = idToEmployee.get(employeeId);
-            length++;
+        if (employee == null || employee.getManagerId() == -1) {
+            return 0;
+        } else {
+            return 1 + getEmployeeReportingLineLength(employee.getManagerId());
         }
-        return length;
     }
 }

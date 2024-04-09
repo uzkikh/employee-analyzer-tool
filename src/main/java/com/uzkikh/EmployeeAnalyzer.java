@@ -20,15 +20,15 @@ public class EmployeeAnalyzer {
 
         List<Employee> employees = parseCsv(args[0]);
 
-        identifyPotentialImprovements(employees);
+        identifyPotentialImprovementsInSalaryAndStructure(employees);
     }
 
-    private static void identifyPotentialImprovements(List<Employee> employees) {
+    private static void identifyPotentialImprovementsInSalaryAndStructure(List<Employee> employees) {
         OrganizationStructureService organizationStructureService = new OrganizationStructureServiceImpl(employees);
         SalaryService salaryService = new SalaryServiceImpl();
 
         System.out.println("Results of the analysis of the company structure and current salaries:");
-        organizationStructureService.findAllEmployees()
+        organizationStructureService.getAllEmployees()
                 .forEach(employee -> {
                     analyzeEmployeeSalary(employee, organizationStructureService, salaryService);
                     analyzeReportingLength(employee, organizationStructureService);
@@ -45,7 +45,7 @@ public class EmployeeAnalyzer {
 
     private static void analyzeEmployeeSalary(Employee employee, OrganizationStructureService organizationStructure,
                                               SalaryService salaryService) {
-        List<Employee> directSubordinates = organizationStructure.findEmployeeDirectSubordinates(employee.getId());
+        List<Employee> directSubordinates = organizationStructure.getEmployeeDirectSubordinates(employee.getId());
         BigDecimal change = salaryService.calculateRequiredSalaryChange(employee, directSubordinates);
         if (change.compareTo(BigDecimal.ZERO) != 0) {
             System.out.println(String.format("%s salary must be adjusted by %s", employee, change));

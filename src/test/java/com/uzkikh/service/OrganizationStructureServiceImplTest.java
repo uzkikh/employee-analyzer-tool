@@ -15,8 +15,8 @@ class OrganizationStructureServiceImplTest {
     void testShouldReturnEmptyIfOrganizationIsEmpty() {
         OrganizationStructureServiceImpl service = new OrganizationStructureServiceImpl(List.of());
 
-        assertEquals(Collections.emptyList(), service.findAllEmployees());
-        assertEquals(Collections.emptyList(), service.findEmployeeDirectSubordinates(100));
+        assertEquals(Collections.emptyList(), service.getAllEmployees());
+        assertEquals(Collections.emptyList(), service.getEmployeeDirectSubordinates(100));
     }
 
     @Test
@@ -37,7 +37,7 @@ class OrganizationStructureServiceImplTest {
 
         OrganizationStructureServiceImpl service = new OrganizationStructureServiceImpl(employees);
 
-        assertEquals(employees, service.findAllEmployees());
+        assertEquals(employees, service.getAllEmployees());
     }
 
     @Test
@@ -55,7 +55,7 @@ class OrganizationStructureServiceImplTest {
 
         OrganizationStructureServiceImpl service = new OrganizationStructureServiceImpl(employees);
 
-        assertEquals(expected, service.findEmployeeDirectSubordinates(100));
+        assertEquals(expected, service.getEmployeeDirectSubordinates(100));
     }
 
     @Test
